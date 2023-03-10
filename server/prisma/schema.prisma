@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://admin:password@localhost/camdo"
+}
+
+model Loan {
+  id           Int          @id @default(autoincrement())
+  userName     String
+  productName  String
+  amount       Int
+  status       Status       @default(ACTIVED)
+  interest     Float
+  interestType InterestType
+  startedAt    DateTime
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  paidAmount   Int?
+  paidAt       DateTime?
+  userPhone    String?
+}
+
+enum Status {
+  ACTIVED
+  DELETED
+  PAID
+  SOLD
+}
+
+enum InterestType {
+  PERCENTS_PER_MONTH
+  PERCENTS_PER_DAY
+  AMOUNT_PER_MONTH
+  AMOUNT_PER_DAY
+}
