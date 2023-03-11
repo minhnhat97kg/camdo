@@ -94,19 +94,19 @@ export default function WalletPane() {
                 </Card>
             </Col>
         </Row>
-        {/* <Row style={{ margin: '20px 10px' }}>
+        { <Row style={{ margin: '20px 10px' }}>
             <Col span={10} >
                 <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Tạo giao dịch</Button>
             </Col>
-            <Col span={14} >
+            {/* <Col span={14} >
 
                 <Space>
                     <p>Chọn thời gian: </p>
                     <DatePicker.RangePicker locale={locale} onChange={setDateFilter} value={dateFilter} format={'DD-MM-YYYY'} />
                     <Button onClick={listWallet} icon={<SearchOutlined />} type={'primary'}>Tìm</Button>
                 </Space>
-            </Col>
-        </Row> */}
+            </Col> */}
+        </Row> }
 
         <Table size='small' dataSource={wallets} columns={columns({
             onDelete: handleDelele,
