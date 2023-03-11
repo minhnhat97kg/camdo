@@ -81,7 +81,8 @@ async function createLoan(req, res, next) {
                 amount,
                 interest,
                 interestType,
-                startedAt
+                startedAt,
+                userID: 0,
             }
         })
         return res.status(200).json({ message: "Tạo thành công" })
@@ -152,7 +153,7 @@ async function payLoanByID(req, res, next) {
             where: { id: parseInt(id), status: 'ACTIVED' },
             data: {
                 status: 'PAID',
-                paidAt: moment().toISOString(),
+                paidAt:dayjs().toISOString(),
                 paidAmount: paidAmount
             },
         })

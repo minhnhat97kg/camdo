@@ -47,7 +47,6 @@ export default function CreatingForm({ onOk, onCancel, open, onClose }) {
                     <InputNumber
                         style={{ width: '100%' }}
                         prefix="đ"
-                        defaultValue={1000}
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                     />

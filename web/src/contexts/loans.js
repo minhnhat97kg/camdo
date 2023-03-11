@@ -1,14 +1,17 @@
 import { message } from "antd";
-import { createContext, useState, useMemo } from "react";
+import { createContext, useState, useMemo, useContext } from "react";
 import axios from "axios";
 import * as util from '../utils'
 import dayjs from 'dayjs';
+import { WalletContext } from "./wallet";
 
 export const LoanContext = createContext()
 
 function LoanProvider({ children }) {
+
+    const { getAvailable } = useContext(WalletContext)
     const [loans, setLoans] = useState([])
-    const [dateFilter,setDateFilter] = useState([dayjs().startOf('month'), dayjs().endOf('month')])
+    const [dateFilter, setDateFilter] = useState([dayjs().startOf('month'), dayjs().endOf('month')])
 
     async function listLoan() {
         try {
@@ -16,10 +19,12 @@ function LoanProvider({ children }) {
             setLoans(data?.data || [])
         } catch (err) {
             message.error(JSON.stringify(err))
+        }finally {
+            getAvailable()
         }
     }
 
-    return <LoanContext.Provider value={{ loans, listLoan, dateFilter,setDateFilter}}>
+    return <LoanContext.Provider value={{ loans, listLoan, dateFilter, setDateFilter }}>
         {children}
     </LoanContext.Provider>
 }

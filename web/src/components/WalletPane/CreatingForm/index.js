@@ -30,10 +30,10 @@ export default function CreatingForm({ onOk, onCancel, open, onClose }) {
                 form={form}
                 onFinish={handleSubmit}
             >
-                <Form.Item label="Mô tả" name="title" rules={[{ required: true, message: 'Vui long nhập mô tả', }]} >
+                <Form.Item label="Mô tả" name="title" rules={[{ required: true, message: 'Vui lòng nhập mô tả', }]} >
                     <Input />
                 </Form.Item>
-                <Form.Item label="Số tiền" name="amount" rules={[{ required: true, message: 'Giá trị vay là bắt buộc!', }]} >
+                <Form.Item help={'Giá trị âm là chi, dương là thu'} label="Số tiền" name="amount" rules={[{ required: true, message: 'Giá trị là bắt buộc!', }]} >
                     <InputNumber
                         style={{ width: '100%' }}
                         prefix="đ"

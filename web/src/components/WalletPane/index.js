@@ -1,14 +1,13 @@
-import { Table, Space, message, Modal, Dropdown, Button, Row, Col, Form, Input, Statistic, Card, DatePicker } from 'antd'
+import { Table, Space, message, Modal, Dropdown, Button, Row, Col, Form, Input, Statistic, Card, DatePicker, Tag } from 'antd'
 import dayjs from 'dayjs'
 import * as util from '../../utils'
 import useHook from './hook'
-import { CreditCardOutlined, DeleteOutlined, DollarOutlined, DownOutlined, MoreOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined, SmileOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, MoneyCollectOutlined } from '@ant-design/icons'
 import { Fragment, useMemo } from 'react'
 import CreatingForm from './CreatingForm'
-import PaidForm from './PaidForm'
 import locale from 'antd/es/date-picker/locale/vi_VN';
 
-const columns = ({ onDelete, onDetail, onPaid, onSold }) => [
+const columns = ({ onDelete }) => [
     {
         title: 'ID',
         dataIndex: 'id',
@@ -21,22 +20,20 @@ const columns = ({ onDelete, onDetail, onPaid, onSold }) => [
         key: 'title',
     },
     {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        key: 'status',
-        render: v => <center>{util.statusToString(v)}</center>,
-        filters: util.Statues.map((v) => ({ text: util.statusToString(v), value: v })),
-        onFilter: (value, record) => record.status === value,
+        title: 'Loại',
+        dataIndex: 'type',
+        key: 'type',
+        render: (_, r) => <div>{r.amount > 0 ? <Tag color={'green'}>Thu</Tag> : <Tag color={'orange'}>Chi</Tag>}</div>,
 
     },
     {
-        title: 'Số tiền',
+        title: <center>Số tiền</center>,
         dataIndex: 'amount',
         key: 'amount',
-        render: (v) => <center>{util.formatCurrency(v)}</center>
+        render: v => <div style={{ textAlign: 'right' }}>{util.formatCurrency(v)}</div>
     },
     {
-        title: 'Ngày tạo',
+        title: <center>Ngày tạo</center>,
         dataIndex: 'createdAt',
         key: 'createdAt',
         render: (v) => <center>
@@ -48,70 +45,75 @@ const columns = ({ onDelete, onDetail, onPaid, onSold }) => [
 ];
 export default function WalletPane() {
     const {
-        loans,
-        selected,
-        setSelected,
-        handleDelele,
-        handlePaid,
-        handleDetail,
-        listLoan,
+        wallets,
+        listWallet,
+        available,
         isOpenedModalCreating,
         setOpenedModalCreating,
-        isOpenedModalPaid,
-        setOpenedModalPaid,
         handleCreating,
-        totalDebt,
-        totalProfit,
-        totalFee,
+        handleDelele,
         dateFilter,
-        setDateFilter
+        setDateFilter,
+        total,
     } = useHook()
 
 
     return <Fragment>
         <Row gutter={24} align={''}>
-            <Col span={5}>
-                <Card bordered>
-                    <Statistic title="Tổng tiền cho vay" value={totalDebt || 0} precision={0} suffix={'đ'} />
+            <Col span={8}>
+                <Card bordered={false}>
+                    <Statistic
+                        prefix={<MoneyCollectOutlined />}
+                        title="Tiền hiện có"
+                        value={available.available || 0}
+                        precision={0}
+                        suffix={'đ'} />
                 </Card>
             </Col>
-            <Col span={5}>
-                <Card bordered>
-                    <Statistic title="Tổng lãi tạm tính" value={totalFee || 0} precision={0} suffix={'đ'} />
+            <Col span={8}>
+                <Card bordered={false}>
+                    <Statistic
+                        title="Thu"
+                        value={total.income}
+                        precision={2}
+                        valueStyle={{ color: '#3f8600' }}
+                        prefix={<ArrowUpOutlined />}
+                        suffix="đ"
+                    />
                 </Card>
             </Col>
-            <Col span={5}>
-                <Card bordered>
-                    <Statistic title="Tổng lợi nhuận" value={totalProfit || 0} precision={0} suffix={'đ'} />
+            <Col span={8}>
+                <Card bordered={false}>
+                    <Statistic
+                        title="Chi"
+                        value={total.outcome * -1}
+                        valueStyle={{ color: '#cf1322' }}
+                        prefix={<ArrowDownOutlined />}
+                        suffix="đ"
+                    />
                 </Card>
             </Col>
         </Row>
-        <Row style={{ margin: '20px 10px' }}>
+        {/* <Row style={{ margin: '20px 10px' }}>
             <Col span={10} >
-                <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Khoản vay mới</Button>
+                <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Tạo giao dịch</Button>
             </Col>
             <Col span={14} >
 
                 <Space>
                     <p>Chọn thời gian: </p>
                     <DatePicker.RangePicker locale={locale} onChange={setDateFilter} value={dateFilter} format={'DD-MM-YYYY'} />
-                    <Button onClick={listLoan} icon={<SearchOutlined />} type={'primary'}>Tìm</Button>
+                    <Button onClick={listWallet} icon={<SearchOutlined />} type={'primary'}>Tìm</Button>
                 </Space>
             </Col>
-        </Row>
+        </Row> */}
 
-        <Table size='small' dataSource={loans} da columns={columns({
+        <Table size='small' dataSource={wallets} columns={columns({
             onDelete: handleDelele,
-            onDetail: handleDetail,
-            onPaid: (v) => {
-                setSelected(v)
-                setOpenedModalPaid(true)
-            },
         })}
             key={(v) => v.id}
         />
         <CreatingForm open={isOpenedModalCreating} onOk={handleCreating} onClose={() => setOpenedModalCreating(false)} />
-        <PaidForm open={isOpenedModalPaid} onOk={handlePaid} onClose={() => setOpenedModalPaid(false)} data={selected} />
     </Fragment>
 }
 

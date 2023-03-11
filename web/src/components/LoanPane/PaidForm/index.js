@@ -66,7 +66,7 @@ export default function PaidForm({ onOk, onCancel, open, onClose, data }) {
                 <Form.Item label="Tạm tính">
                     <Input value={util.formatCurrency(data?.lateAmount || 0)} disabled />
                 </Form.Item>
-                <Form.Item label="Số tiền" name="paidAmount" rules={[{ required: true, message: 'Giá trị vay là bắt buộc!', }]} >
+                <Form.Item label="Số tiền lãi" name="paidAmount" rules={[{ required: true, message: 'Giá trị vay là bắt buộc!', }]} >
                     <InputNumber
                         style={{ width: '100%' }}
                         prefix="đ"

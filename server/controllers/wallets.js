@@ -4,14 +4,9 @@ const dayjs = require('dayjs'); // require
 
 
 function getWallet(req, res, next) {
-    const { b, e } = req.query
     prisma.wallet.findMany({
         where: {
-            status: { not: Status.Deleted },
-            createdAt: {
-                lte: dayjs(e).toISOString(),
-                gte: dayjs(b).toISOString()
-            }
+            status: { not: 'DELETED' },
         },
         orderBy: { id: 'asc' }
     })
@@ -32,7 +27,8 @@ async function createRecord(req, res, next) {
         const data = await prisma.wallet.create({
             data: {
                 title,
-                amount
+                amount,
+                userID: 0,
             }
         })
         return res.status(200).json({ message: "Tạo thành công" })
@@ -40,22 +36,43 @@ async function createRecord(req, res, next) {
         next(error)
     }
 }
-function getAvailable(req, res, next) {
-    prisma.wallet.aggregate({
-        where: {
-            id: parseInt(req.params.id),
-            status: 'ACTIVED'
-        },
-        _sum: {
-            amount: true
-        }
-    })
-        .then((v) => {
-            res.json(v)
+async function getAvailable(req, res, next) {
+    try {
+
+        const sumWallet = await prisma.wallet.aggregate({
+            where: {
+                status: 'ACTIVED'
+            },
+            _sum: {
+                amount: true
+            }
         })
-        .catch((err) => {
-            next(err)
+
+        const sumLoans = await prisma.loan.aggregate({
+            where: {
+                status: 'ACTIVED'
+            },
+            _sum: {
+                amount: true,
+            }
         })
+
+        const sumProfit = await prisma.loan.aggregate({
+            where: {
+                status: 'PAID'
+            },
+            _sum: {
+                amount: true,
+                paidAmount: true
+            }
+        })
+        const { _sum: { amount: walletAmount } } = sumWallet
+        const { _sum: { amount: loanAmount } } = sumLoans
+        const { _sum: { amount: amount, paidAmount: profitAmount } } = sumProfit
+        res.json({ available: walletAmount + amount + profitAmount, profitAmount, loanAmount })
+    } catch (err) {
+        next(err)
+    }
 }
 
 function deleteRecordByID(req, res, next) {

@@ -5,15 +5,26 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import DetailForm from './DetailForm';
 import axios from 'axios';
 import { LoanContext } from '../../contexts/loans';
+import { WalletContext } from '../../contexts/wallet';
 export default function Hook() {
     const { loans, listLoan, dateFilter, setDateFilter } = useContext(LoanContext)
+    const { available } = useContext(WalletContext)
     const [selected, setSelected] = useState()
     const [isOpenedModalCreating, setOpenedModalCreating] = useState(false)
     const [isOpenedModalPaid, setOpenedModalPaid] = useState(false)
 
-    const totalDebt = useMemo(() => loans.reduce((p, c) => c.status === util.Status.Actived && p + c.amount, 0), [loans, listLoan])
-    const totalFee = useMemo(() => loans.reduce((p, c) => c.status === util.Status.Actived && p + c.lateAmount, 0), [loans, listLoan])
-    const totalProfit = useMemo(() => loans.reduce((p, c) => c.status === util.Status.Paid && p + (c.paidAmount || 0), 0), [loans, listLoan])
+    const total = useMemo(() => loans.reduce((p, c) => {
+        switch (c.status) {
+            case util.Status.Actived:
+                return { ...p, debt: p.debt + c.amount, fee: p.fee + c.lateAmount }
+            case util.Status.Paid:
+                return { ...p, profit: c.paidAmount + p.profit }
+            default:
+                return p
+        }
+    }, { debt: 0, fee: 0, profit: 0 }), [loans])
+
+
 
     async function handleDelele({ id, productName }) {
         Modal.confirm({
@@ -84,10 +95,9 @@ export default function Hook() {
         handleCreating,
         isOpenedModalPaid,
         setOpenedModalPaid,
-        totalDebt,
-        totalFee,
-        totalProfit,
         dateFilter,
-        setDateFilter
+        setDateFilter,
+        available,
+        total
     }
 }

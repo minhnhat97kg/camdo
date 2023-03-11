@@ -2,7 +2,7 @@ import { Table, Space, message, Modal, Dropdown, Button, Row, Col, Form, Input, 
 import dayjs from 'dayjs'
 import * as util from '../../utils'
 import useHook from './hook'
-import { CreditCardOutlined, DeleteOutlined, DollarOutlined, DownOutlined, MoreOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined, SmileOutlined } from '@ant-design/icons'
+import { CreditCardOutlined, DeleteOutlined, DollarOutlined, DownOutlined, MoneyCollectFilled, MoneyCollectOutlined, MoneyCollectTwoTone, MoreOutlined, PlusCircleOutlined, ReloadOutlined, SearchOutlined, SmileOutlined } from '@ant-design/icons'
 import { Fragment, useMemo } from 'react'
 import CreatingForm from './CreatingForm'
 import PaidForm from './PaidForm'
@@ -135,29 +135,41 @@ export default function LoanPane() {
         isOpenedModalPaid,
         setOpenedModalPaid,
         handleCreating,
-        totalDebt,
-        totalProfit,
-        totalFee,
+        total,
         dateFilter,
-        setDateFilter
+        setDateFilter,
+        available
     } = useHook()
 
 
     return <Fragment>
         <Row gutter={24} align={''}>
             <Col span={5}>
-                <Card bordered>
-                    <Statistic title="Tổng tiền cho vay" value={totalDebt || 0} precision={0} suffix={'đ'} />
+                <Card bordered={false}>
+                    <Statistic
+                        prefix={<MoneyCollectTwoTone />}
+                        title="Tiền hiện có"
+                        value={available.available || 0}
+                        precision={0}
+                        suffix={'đ'} />
+                </Card>
+            </Col>
+        </Row>
+        <p style={{color:'grey', fontWeight:'bold'}}>{`Tạm tính từ ngày ${dayjs(dateFilter[0]).format('DD-MM-YYYY')} đến ngày ${dayjs(dateFilter[1]).format('DD-MM-YYYY')}`}</p>
+        <Row gutter={24} align={''}>
+            <Col span={5}>
+                <Card bordered={false}>
+                    <Statistic title="Tổng tiền cho vay" value={total.debt || 0} precision={0} suffix={'đ'} />
                 </Card>
             </Col>
             <Col span={5}>
-                <Card bordered>
-                    <Statistic title="Tổng lãi tạm tính" value={totalFee || 0} precision={0} suffix={'đ'} />
+                <Card bordered={false}>
+                    <Statistic title="Tổng lãi tạm tính" value={total.fee || 0} precision={0} suffix={'đ'} />
                 </Card>
             </Col>
             <Col span={5}>
-                <Card bordered>
-                    <Statistic title="Tổng lợi nhuận" value={totalProfit || 0} precision={0} suffix={'đ'} />
+                <Card bordered={false}>
+                    <Statistic title="Tổng lợi nhuận" value={total.profit || 0} precision={0} suffix={'đ'} />
                 </Card>
             </Col>
         </Row>
