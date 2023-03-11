@@ -116,7 +116,7 @@ function updateLoanByID(req, res, next) {
         }
     })
         .then((loan) => {
-            res.json(loan)
+            res.json({ message: `Cập nhật thành công id [${loan.id}]` })
         })
         .catch((err) => {
             next(err)
@@ -133,7 +133,7 @@ function deleteLoanByID(req, res, next) {
         },
     })
         .then((loan) => {
-            res.json(loan)
+            res.json({ message: `Xoá thành công id [${loan.id}]` })
         })
         .catch((err) => {
             next(err)
