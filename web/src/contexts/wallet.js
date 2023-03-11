@@ -13,7 +13,7 @@ function WalletProvider({ children }) {
 
     async function listWallet() {
         try {
-            const { data } = await axios.get(`http://localhost:3001/wallets?b=${dateFilter[0].toISOString()}&e=${dateFilter[1].toISOString()}`)
+            const { data } = await axios.get(`http://207.148.68.86:3001/wallets?b=${dateFilter[0].toISOString()}&e=${dateFilter[1].toISOString()}`)
             setWallet(data?.data || [])
         } catch (err) {
             message.error(JSON.stringify(err))
@@ -24,7 +24,7 @@ function WalletProvider({ children }) {
 
     async function getAvailable() {
         try {
-            const { data } = await axios.get(`http://localhost:3001/wallets/available`)
+            const { data } = await axios.get(`http://207.148.68.86:3001/wallets/available`)
             setAvailable(data)
         } catch (err) {
             message.error(JSON.stringify(err))

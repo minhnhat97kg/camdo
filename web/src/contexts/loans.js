@@ -15,7 +15,7 @@ function LoanProvider({ children }) {
 
     async function listLoan() {
         try {
-            const { data } = await axios.get(`http://localhost:3001/loans?b=${dateFilter[0].toISOString()}&e=${dateFilter[1].toISOString()}`)
+            const { data } = await axios.get(`http://207.148.68.86:3001/loans?b=${dateFilter[0].toISOString()}&e=${dateFilter[1].toISOString()}`)
             setLoans(data?.data || [])
         } catch (err) {
             message.error(JSON.stringify(err))

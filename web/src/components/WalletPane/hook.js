@@ -25,7 +25,7 @@ export default function Hook() {
             cancelText: 'No',
             async onOk() {
                 try {
-                    const { data } = await axios.delete(`http://localhost:3001/loans/${id}`)
+                    const { data } = await axios.delete(`http://207.148.68.86:3001/loans/${id}`)
                     message.info(JSON.stringify(data))
                 } catch (err) {
                     message.error(`Lỗi khi xoá ${productName}.`)
@@ -39,7 +39,7 @@ export default function Hook() {
 
     async function handleCreating(values) {
         try {
-            const { data } = await axios.post(`http://localhost:3001/wallets`, values)
+            const { data } = await axios.post(`http://207.148.68.86:3001/wallets`, values)
             message.info(JSON.stringify(data))
         } catch (err) {
             message.error(`Lỗi khi tạo khoản vay`)
