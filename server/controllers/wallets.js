@@ -69,7 +69,7 @@ async function getAvailable(req, res, next) {
         const { _sum: { amount: walletAmount } } = sumWallet
         const { _sum: { amount: loanAmount } } = sumLoans
         const { _sum: { amount: amount, paidAmount: profitAmount } } = sumProfit
-        res.json({ available: walletAmount + amount + profitAmount, profitAmount, loanAmount })
+        res.json({ available: walletAmount + amount + profitAmount - loanAmount, profitAmount, loanAmount })
     } catch (err) {
         next(err)
     }

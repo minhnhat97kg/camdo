@@ -29,25 +29,18 @@ const columns = ({ onDelete, onDetail, onPaid, onSold }) => [
         dataIndex: 'productName',
         key: 'productName',
     },
-    {
-        title: 'Trạng thái',
-        dataIndex: 'status',
-        key: 'status',
-        render: v => <center>{util.statusToString(v)}</center>,
-        filters: util.Statues.map((v) => ({ text: util.statusToString(v), value: v })),
-        onFilter: (value, record) => record.status === value,
+    // {
+    //     title: 'Trạng thái',
+    //     dataIndex: 'status',
+    //     key: 'status',
+    //     render: v => <center>{util.statusToString(v)}</center>,
+    //     filters: util.Statues.map((v) => ({ text: util.statusToString(v), value: v })),
+    //     onFilter: (value, record) => record.status === value,
 
-    },
+    // },
     {
         title: 'Số tiền vay',
         dataIndex: 'amount',
-        key: 'amount',
-        render: (v) => <center>{util.formatCurrency(v)}</center>
-    },
-
-    {
-        title: 'Số tiền đã trả',
-        dataIndex: 'paidAmount',
         key: 'amount',
         render: (v) => <center>{util.formatCurrency(v)}</center>
     },
@@ -65,7 +58,7 @@ const columns = ({ onDelete, onDetail, onPaid, onSold }) => [
         key: 'startedAt',
         render: (_, r) => <center>
             <p style={{ margin: 1 }}>{dayjs(r.startedAt).locale(locale).format("DD-MM-YYYY")}</p>
-            {r.days > 0 && <p style={{ fontSize: 11, color: 'grey', margin: 1 }}>{`(Trễ ${r.days} ngày)`}</p>}
+            {r.days > 0 && <p style={{ fontSize: 11, color: 'grey', margin: 1 }}>{`(${r.days} ngày)`}</p>}
         </center>,
         sorter: (a, b) => dayjs(a.startedAt).isAfter(dayjs(b.startedAt))
     },
@@ -154,10 +147,7 @@ export default function LoanPane() {
                         suffix={'đ'} />
                 </Card>
             </Col>
-        </Row>
-        <p style={{color:'grey', fontWeight:'bold'}}>{`Tạm tính từ ngày ${dayjs(dateFilter[0]).format('DD-MM-YYYY')} đến ngày ${dayjs(dateFilter[1]).format('DD-MM-YYYY')}`}</p>
-        <Row gutter={24} align={''}>
-            <Col span={5}>
+             <Col span={5}>
                 <Card bordered={false}>
                     <Statistic title="Tổng tiền cho vay" value={total.debt || 0} precision={0} suffix={'đ'} />
                 </Card>
@@ -167,27 +157,14 @@ export default function LoanPane() {
                     <Statistic title="Tổng lãi tạm tính" value={total.fee || 0} precision={0} suffix={'đ'} />
                 </Card>
             </Col>
-            <Col span={5}>
-                <Card bordered={false}>
-                    <Statistic title="Tổng lợi nhuận" value={total.profit || 0} precision={0} suffix={'đ'} />
-                </Card>
-            </Col>
         </Row>
         <Row style={{ margin: '20px 10px' }}>
             <Col span={10} >
                 <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Khoản vay mới</Button>
             </Col>
-            <Col span={14} >
-
-                <Space>
-                    <p>Chọn thời gian: </p>
-                    <DatePicker.RangePicker locale={locale} onChange={setDateFilter} value={dateFilter} format={'DD-MM-YYYY'} />
-                    <Button onClick={listLoan} icon={<SearchOutlined />} type={'primary'}>Tìm</Button>
-                </Space>
-            </Col>
         </Row>
 
-        <Table size='small' dataSource={loans} da columns={columns({
+        <Table size='small' dataSource={loans}  columns={columns({
             onDelete: handleDelele,
             onDetail: handleDetail,
             onPaid: (v) => {

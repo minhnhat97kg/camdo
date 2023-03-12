@@ -3,6 +3,7 @@ import { Tabs } from 'antd';
 import LoanProvider from './contexts/loans'
 import WalletPane from './components/WalletPane';
 import WalletProvider from './contexts/wallet';
+import ProfitPane from './components/ProfitPane';
 const items = [
   {
     key: '1',
@@ -17,6 +18,12 @@ const items = [
   },
   {
     key: '3',
+    label: `Chuộc`,
+    children: <ProfitPane />
+    ,
+  },
+  {
+    key: '4',
     label: `Thu chi`,
     children: <WalletPane />,
   },
@@ -26,7 +33,7 @@ export default function App() {
     <div style={{ padding: 20 }}>
       <WalletProvider>
         <LoanProvider>
-          <Tabs defaultActiveKey="2" items={items} tabPosition={'left'} />
+          <Tabs defaultActiveKey="2" items={items} tabPosition={'left'} style={{}}/>
         </LoanProvider>
       </WalletProvider>
     </div>

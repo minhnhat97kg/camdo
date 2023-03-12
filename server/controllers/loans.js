@@ -43,19 +43,15 @@ function calculateFee(data) {
 
 
 function getLoans(req, res, next) {
-    const { b, e } = req.query
+    const stt = req.query?.stt || Status.Actived
     prisma.loan.findMany({
         where: {
-            status: { not: Status.Deleted },
-            startedAt: {
-                lte: dayjs(e).toISOString(),
-                gte: dayjs(b).toISOString()
-            }
+            status: stt,
         },
         orderBy: { id: 'asc' }
     })
         .then((loans) => {
-            res.status(200).json({ data: loans.map((v) => ({ ...v, ...calculateFee(v) })) })
+            res.status(200).json(loans.map((v) => ({ ...v, ...calculateFee(v) })))
         })
         .catch((err) => {
             next(err)
@@ -153,7 +149,7 @@ async function payLoanByID(req, res, next) {
             where: { id: parseInt(id), status: 'ACTIVED' },
             data: {
                 status: 'PAID',
-                paidAt:dayjs().toISOString(),
+                paidAt: dayjs().toISOString(),
                 paidAmount: paidAmount
             },
         })

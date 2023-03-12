@@ -8,7 +8,9 @@ import {
     Modal
 } from 'antd';
 import dayjs from 'dayjs';
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import { useEffect, useState } from 'react';
+
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -41,7 +43,7 @@ export default function CreatingForm({ onOk, onCancel, open, onClose }) {
                     <Input />
                 </Form.Item>
                 <Form.Item label="Ngày vay" name="startedAt" rules={[{ required: true, message: 'Ngày vay là bắt buộc!', }]}>
-                    <DatePicker />
+                    <DatePicker locale={locale} format={'DD-MM-YYYY'} />
                 </Form.Item>
                 <Form.Item label="Số tiền" name="amount" rules={[{ required: true, message: 'Giá trị vay là bắt buộc!', }]} >
                     <InputNumber

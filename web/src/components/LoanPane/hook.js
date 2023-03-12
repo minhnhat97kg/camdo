@@ -3,7 +3,7 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import * as util from '../../utils'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import DetailForm from './DetailForm';
-import axios from 'axios';
+import client from '../../utils/client';
 import { LoanContext } from '../../contexts/loans';
 import { WalletContext } from '../../contexts/wallet';
 export default function Hook() {
@@ -13,7 +13,7 @@ export default function Hook() {
     const [isOpenedModalCreating, setOpenedModalCreating] = useState(false)
     const [isOpenedModalPaid, setOpenedModalPaid] = useState(false)
 
-    const total = useMemo(() => loans.reduce((p, c) => {
+    const total = useMemo(() => loans && loans.reduce((p, c) => {
         switch (c.status) {
             case util.Status.Actived:
                 return { ...p, debt: p.debt + c.amount, fee: p.fee + c.lateAmount }
@@ -35,7 +35,7 @@ export default function Hook() {
             cancelText: 'No',
             async onOk() {
                 try {
-                    const { data } = await axios.delete(`http://207.148.68.86:3001/loans/${id}`)
+                    const { data } = await client.delete(`/loans/${id}`)
                     message.info(JSON.stringify(data))
                 } catch (err) {
                     message.error(`Lỗi khi xoá ${productName}.`)
@@ -49,7 +49,7 @@ export default function Hook() {
 
     async function handlePaid({ id, productName, paidAmount }) {
         try {
-            const { data } = await axios.post(`http://207.148.68.86:3001/loans/${id}/pay`, { paidAmount })
+            const { data } = await client.post(`/loans/${id}/pay`, { paidAmount })
             message.info(JSON.stringify(data.message))
         } catch (err) {
             message.error(`Lỗi khi thanh toán ${productName}.`)
@@ -69,7 +69,7 @@ export default function Hook() {
 
     async function handleCreating(values) {
         try {
-            const { data } = await axios.post(`http://207.148.68.86:3001/loans`, values)
+            const { data } = await client.post(`/loans`, values)
             message.info(JSON.stringify(data))
         } catch (err) {
             message.error(`Lỗi khi tạo khoản vay`)
