@@ -98,7 +98,6 @@ async function updateLoanByID(req, res, next) {
         startedAt,
     } = req.body
 
-    console.table(req.body)
     try {
         await orm.loan.update({
             where: {
