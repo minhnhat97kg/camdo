@@ -11,17 +11,20 @@ import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { useEffect, useState } from 'react';
 
-const { RangePicker } = DatePicker;
-
-export default function CreatingForm({ onOk, onCancel, open, onClose }) {
+export default function EditForm({ onOk, data, open, onClose }) {
     const [form] = Form.useForm();
 
     function handleSubmit(values) {
-        onOk({ ...values, createdAt: dayjs(values.createdAt).startOf('day').toISOString() })
+        onOk({ ...values, startedAt: dayjs(values.startedAt).startOf('day').toISOString() })
         onClose()
         form.resetFields()
 
     }
+    useEffect(() => {
+        if (data) {
+            form.setFieldsValue({ ...data, startedAt: dayjs(data.startedAt) })
+        }
+    }, [data])
     return (
         <Modal open={open} onOk={form.submit} onCancel={onClose}>
             <Form
@@ -31,6 +34,10 @@ export default function CreatingForm({ onOk, onCancel, open, onClose }) {
                 form={form}
                 onFinish={handleSubmit}
             >
+                <Form.Item label="ID" name="id"  >
+                    <Input disabled />
+                </Form.Item>
+
                 <Form.Item label="Khách hàng" name="userName" rules={[{ required: true, message: 'Tên khách hàng là bắt buộc!', }]} >
                     <Input />
                 </Form.Item>
@@ -42,7 +49,7 @@ export default function CreatingForm({ onOk, onCancel, open, onClose }) {
                     <Input />
                 </Form.Item>
                 <Form.Item label="Ngày vay" name="startedAt" rules={[{ required: true, message: 'Ngày vay là bắt buộc!', }]}>
-                    <DatePicker locale={locale} format={'DD-MM-YYYY'} />
+                    <DatePicker format={'DD-MM-YYYY'} locale={locale} />
                 </Form.Item>
                 <Form.Item label="Số tiền" name="amount" rules={[{ required: true, message: 'Giá trị vay là bắt buộc!', }]} >
                     <InputNumber
@@ -64,6 +71,6 @@ export default function CreatingForm({ onOk, onCancel, open, onClose }) {
                     <InputNumber />
                 </Form.Item>
             </Form>
-        </Modal>
+        </Modal >
     );
 };

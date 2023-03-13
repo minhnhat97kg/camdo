@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const orm = require('../utils/orm')
 const dayjs = require('dayjs'); // require
 
 const InterestType = {
@@ -35,7 +34,7 @@ function calculateFee(data) {
         case InterestType.AmountPerMonth:
             return { days: diffDays, lateAmount: (interest / 30) * diffDays * amount }
         case InterestType.AmountPerDay:
-            return { days: diffDays, lateAmount: interest * diffDays * amount }
+            return { days: diffDays, lateAmount: interest * diffDays }
         default:
             throw new Error('Invalid interest type')
     }
@@ -43,10 +42,11 @@ function calculateFee(data) {
 
 
 function getLoans(req, res, next) {
-    const stt = req.query?.stt || Status.Actived
-    prisma.loan.findMany({
+    const stt = req.query.stt
+
+    orm.loan.findMany({
         where: {
-            status: stt,
+            status: { in: stt?.split(',') || ['ACTIVED'] },
         },
         orderBy: { id: 'asc' }
     })
@@ -69,7 +69,7 @@ async function createLoan(req, res, next) {
     } = req.body
 
     try {
-        const loan = await prisma.loan.create({
+        await orm.loan.create({
             data: {
                 userName,
                 userPhone,
@@ -86,8 +86,42 @@ async function createLoan(req, res, next) {
         next(error)
     }
 }
+async function updateLoanByID(req, res, next) {
+    const { id } = req.params
+    const {
+        userName,
+        userPhone,
+        productName,
+        amount,
+        interest,
+        interestType,
+        startedAt,
+    } = req.body
+
+    console.table(req.body)
+    try {
+        await orm.loan.update({
+            where: {
+                id: parseInt(id)
+            },
+            data: {
+                userName,
+                userPhone,
+                productName,
+                amount,
+                interest,
+                interestType,
+                startedAt,
+                userID: 0,
+            }
+        })
+        return res.status(200).json({ message: "Cập nhật thành công" })
+    } catch (error) {
+        next(error)
+    }
+}
 function getLoanByID(req, res, next) {
-    prisma.loan.findUnique({
+    orm.loan.findUnique({
         where: {
             id: parseInt(req.params.id)
         }
@@ -100,28 +134,8 @@ function getLoanByID(req, res, next) {
         })
 }
 
-function updateLoanByID(req, res, next) {
-    prisma.loan.update({
-        where: {
-            id: parseInt(req.params.id)
-        },
-        data: {
-            amount: req.body.amount,
-            interest: req.body.interest,
-            term: req.body.term,
-            status: req.body.status
-        }
-    })
-        .then((loan) => {
-            res.json({ message: `Cập nhật thành công id [${loan.id}]` })
-        })
-        .catch((err) => {
-            next(err)
-        })
-}
-
 function deleteLoanByID(req, res, next) {
-    prisma.loan.update({
+    orm.loan.update({
         where: {
             id: parseInt(req.params.id)
         },
@@ -134,7 +148,6 @@ function deleteLoanByID(req, res, next) {
         })
         .catch((err) => {
             next(err)
-            console.log(err)
         })
 }
 
@@ -145,7 +158,7 @@ async function payLoanByID(req, res, next) {
         let { paidAmount } = req.body
         if (!paidAmount) return res.status(400).json({ error: 'Amount is requried' })
 
-        const result = await prisma.loan.updateMany({
+        const result = await orm.loan.updateMany({
             where: { id: parseInt(id), status: 'ACTIVED' },
             data: {
                 status: 'PAID',
@@ -161,12 +174,37 @@ async function payLoanByID(req, res, next) {
     }
 }
 
+async function sellLoanByID(req, res, next) {
+    try {
+
+        const { id } = req.params
+        let { paidAmount } = req.body
+        if (!paidAmount) return res.status(400).json({ error: 'Amount is requried' })
+
+        const result = await orm.loan.updateMany({
+            where: { id: parseInt(id), status: 'ACTIVED' },
+            data: {
+                status: 'SOLD',
+                paidAt: dayjs().toISOString(),
+                paidAmount: paidAmount
+            },
+        })
+        if (result.count == 0)
+            return res.status(400).json({ error: 'Không thể thực hiện' })
+        return res.status(200).json({ message: 'Thanh lý khoản nợ thành công', result })
+    } catch (err) {
+        next(err)
+    }
+}
+
+
 
 async function getReportByMonth(req, res, next) {
     try {
         const month = req.query.month || dayjs()
 
-        const sumLoans = await prisma.loan.aggregate({
+
+        const sumLoans = await orm.loan.aggregate({
             where: {
                 status: 'ACTIVED',
                 startedAt: {
@@ -179,9 +217,9 @@ async function getReportByMonth(req, res, next) {
             }
         })
 
-        const sumProfit = await prisma.loan.aggregate({
+        const sumProfit = await orm.loan.aggregate({
             where: {
-                status: 'PAID'
+                status: { in: ['PAID', 'SOLD'] }
             },
             _sum: {
                 amount: true,
@@ -201,7 +239,8 @@ module.exports = {
     getLoans,
     getLoanByID,
     createLoan,
-    updateLoanByID,
     deleteLoanByID,
-    payLoanByID
+    payLoanByID,
+    sellLoanByID,
+    updateLoanByID,
 }

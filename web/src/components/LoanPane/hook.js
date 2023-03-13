@@ -6,14 +6,20 @@ import DetailForm from './DetailForm';
 import client from '../../utils/client';
 import { LoanContext } from '../../contexts/loans';
 import { WalletContext } from '../../contexts/wallet';
+import dayjs from 'dayjs';
+
 export default function Hook() {
-    const { loans, listLoan, dateFilter, setDateFilter } = useContext(LoanContext)
+    const { loans, listLoan, dateFilter, setDateFilter, isLoading } = useContext(LoanContext)
     const { available } = useContext(WalletContext)
     const [selected, setSelected] = useState()
     const [isOpenedModalCreating, setOpenedModalCreating] = useState(false)
     const [isOpenedModalPaid, setOpenedModalPaid] = useState(false)
+    const [isOpenedModalSold, setOpenedModalSold] = useState(false)
+    const [isOpenedModalEdit, setOpenedModalEdit] = useState(false)
 
     const total = useMemo(() => loans && loans.reduce((p, c) => {
+        if (!dayjs(c.startedAt).isSame(dayjs(), 'month'))
+            return p
         switch (c.status) {
             case util.Status.Actived:
                 return { ...p, debt: p.debt + c.amount, fee: p.fee + c.lateAmount }
@@ -58,6 +64,17 @@ export default function Hook() {
         }
     }
 
+    async function handleSold({ id, productName, paidAmount }) {
+        try {
+            const { data } = await client.post(`/loans/${id}/sell`, { paidAmount })
+            message.info(JSON.stringify(data.message))
+        } catch (err) {
+            message.error(`Lỗi khi thanh lý${productName}.`)
+        } finally {
+            listLoan()
+        }
+    }
+
     function handleDetail(record) {
         const value = loans.find(v => record.id == v.id)
         setSelected(value)
@@ -78,23 +95,42 @@ export default function Hook() {
         }
     }
 
+    async function handleEdit(values) {
+        try {
+            const { id } = values
+            const { data } = await client.patch(`/loans/${id}`, values)
+            message.info(JSON.stringify(data))
+        } catch (err) {
+            message.error(`Lỗi khi cập nhật khoản vay`)
+        } finally {
+            listLoan()
+        }
+    }
+
     useEffect(() => {
         listLoan()
     }, [])
 
     return {
+        loans,
         listLoan,
+        isLoading,
         handleDelele,
+        handleCreating,
         handlePaid,
         handleDetail,
-        loans,
+        handleSold,
+        handleEdit,
         selected,
         setSelected,
         isOpenedModalCreating,
         setOpenedModalCreating,
-        handleCreating,
         isOpenedModalPaid,
         setOpenedModalPaid,
+        isOpenedModalSold,
+        setOpenedModalSold,
+        isOpenedModalEdit,
+        setOpenedModalEdit,
         dateFilter,
         setDateFilter,
         available,

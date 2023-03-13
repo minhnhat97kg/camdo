@@ -2,7 +2,7 @@ import { Table, Space, message, Modal, Dropdown, Button, Row, Col, Form, Input, 
 import dayjs from 'dayjs'
 import * as util from '../../utils'
 import useHook from './hook'
-import { PlusCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, MoneyCollectOutlined } from '@ant-design/icons'
+import { PlusCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, MoneyCollectOutlined, MoneyCollectTwoTone } from '@ant-design/icons'
 import { Fragment, useMemo } from 'react'
 import CreatingForm from './CreatingForm'
 import locale from 'antd/es/date-picker/locale/vi_VN';
@@ -60,17 +60,17 @@ export default function WalletPane() {
 
     return <Fragment>
         <Row gutter={24} align={''}>
-            <Col span={8}>
+            <Col span={6}>
                 <Card bordered={false}>
                     <Statistic
-                        prefix={<MoneyCollectOutlined />}
+                        prefix={<MoneyCollectTwoTone/>}
                         title="Tiền hiện có"
                         value={available.available || 0}
                         precision={0}
                         suffix={'đ'} />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
                 <Card bordered={false}>
                     <Statistic
                         title="Thu"
@@ -82,7 +82,7 @@ export default function WalletPane() {
                     />
                 </Card>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
                 <Card bordered={false}>
                     <Statistic
                         title="Chi"

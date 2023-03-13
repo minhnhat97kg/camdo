@@ -28,15 +28,15 @@ const columns = ({ onDelete, onDetail, onPaid, onSold }) => [
         dataIndex: 'productName',
         key: 'productName',
     },
-    // {
-    //     title: 'Trạng thái',
-    //     dataIndex: 'status',
-    //     key: 'status',
-    //     render: v => <center>{util.statusToString(v)}</center>,
-    //     filters: util.Statues.map((v) => ({ text: util.statusToString(v), value: v })),
-    //     onFilter: (value, record) => record.status === value,
+    {
+        title: 'Trạng thái',
+        dataIndex: 'status',
+        key: 'status',
+        render: v => <center>{util.statusToString(v)}</center>,
+        filters: util.Statues.map((v) => ({ text: util.statusToString(v), value: v })),
+        onFilter: (value, record) => record.status === value,
 
-    // },
+    },
     {
         title: 'Số tiền vay',
         dataIndex: 'amount',
@@ -135,8 +135,8 @@ export default function ProfitPane() {
 
 
     return <Fragment>
-        <Row gutter={24} align={''}>
-            <Col span={5}>
+        <Row gutter={24} style={{ margin: '20px 10px' }} >
+            <Col span={12}>
                 <Card bordered={false}>
                     <Statistic
                         prefix={<MoneyCollectTwoTone />}
@@ -146,17 +146,12 @@ export default function ProfitPane() {
                         suffix={'đ'} />
                 </Card>
             </Col>
-            <Col span={5}>
+            <Col span={12}>
                 <Card bordered={false}>
-                    <Statistic title="Tổng lãi tạm tính" value={total.profit || 0} precision={0} suffix={'đ'} />
+                    <Statistic title="Tổng lãi" value={total.profit || 0} precision={0} suffix={'đ'} />
                 </Card>
             </Col>
         </Row>
-        {/* <Row style={{ margin: '20px 10px' }}>
-            <Col span={10} >
-                <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Khoản vay mới</Button>
-            </Col>
-        </Row> */}
 
         <Table size='small'
             dataSource={profits}

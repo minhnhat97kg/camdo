@@ -9,7 +9,7 @@ export const WalletContext = createContext()
 
 function WalletProvider({ children }) {
     const [wallets, setWallet] = useState([])
-    const [isFetchingAvailable,setIsFetchingAvailable] = useState(false)
+    const [isFetchingAvailable, setIsFetchingAvailable] = useState(false)
     const [available, setAvailable] = useState({ available: 0, profitAmount: 0, loanAmount: 0 })
     const [dateFilter, setDateFilter] = useState([dayjs().startOf('month'), dayjs().endOf('month')])
 
@@ -23,19 +23,19 @@ function WalletProvider({ children }) {
     }
 
     async function getAvailable() {
-        if (isFetchingAvailable) return
+        if (isFetchingAvailable === true) return
         setIsFetchingAvailable(true)
         try {
             const { data } = await client.get(`/wallets/available`)
             setAvailable(data)
         } catch ({ error }) {
             message.error(JSON.stringify(error))
-        }finally{
-            setIsFetchingAvailable(false)
+        } finally {
+            setTimeout(() => setIsFetchingAvailable(false), 2000)
         }
     }
     useEffect(() => {
-        getAvailable()
+        !isFetchingAvailable && getAvailable()
     }, [wallets])
 
     return <WalletContext.Provider value={{ wallets, listWallet, dateFilter, setDateFilter, getAvailable, available }}>

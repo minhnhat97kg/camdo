@@ -8,7 +8,8 @@ import {
     Modal,
     message
 } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import { useEffect, useMemo, useState } from 'react';
 import * as util from '../../../utils'
 
@@ -35,7 +36,7 @@ export default function DetailForm({ data }) {
                 <Input value={data?.productName || ""} />
             </Form.Item>
             <Form.Item label="Ngày vay" >
-                <Input value={moment(data.createdAt || "").format("DD-MM-yyyy")} />
+                <Input value={dayjs(data.createdAt || "").format("DD-MM-YYYY")} />
             </Form.Item>
             <Form.Item label="Số tiền" >
                 <Input value={util.formatCurrency(data?.amount || 0)} />
@@ -50,7 +51,7 @@ export default function DetailForm({ data }) {
                 <Input value={util.formatCurrency(data?.paidAmount || 0)} />
             </Form.Item>
             <Form.Item label="Ngày trả" >
-                <Input value={moment(data.paidAt|| "").format("DD-MM-yyyy")} />
+                <Input value={dayjs(data.paidAt|| "").format("DD-MM-YYYY")} />
             </Form.Item>
             <Form.Item label="Ngày trể">
                 <Input value={data?.days || 0} />

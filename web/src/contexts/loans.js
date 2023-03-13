@@ -16,22 +16,30 @@ function LoanProvider({ children }) {
     const [profits, setProfits] = useState([])
     const [solds, setSolds] = useState([])
     const [dateFilter, setDateFilter] = useState([dayjs().startOf('month'), dayjs().endOf('month')])
+    const [getStatistic, setStatistic] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     async function listLoan() {
+        setIsLoading(true)
         try {
             const { data } = await client.get(`/loans?b=${dateFilter[0].toISOString()}&e=${dateFilter[1].toISOString()}`)
             setLoans(data || [])
-        } catch (err) {
-            message.error(JSON.stringify(err))
+        } catch ({ response }) {
+            message.error(JSON.stringify(response))
+        } finally {
+            setIsLoading(false)
         }
     }
 
     async function listProfit() {
+        setIsLoading(true)
         try {
-            const { data } = await client.get(`/loans?stt=PAID`)
+            const { data } = await client.get(`/loans?stt=PAID,SOLD`)
             setProfits(data || [])
         } catch (err) {
             message.error(JSON.stringify(err))
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -39,7 +47,7 @@ function LoanProvider({ children }) {
         getAvailable()
     }, [loans])
 
-    return <LoanContext.Provider value={{ loans, listLoan, profits, listProfit, dateFilter, setDateFilter }}>
+    return <LoanContext.Provider value={{ loans, listLoan, profits, listProfit, dateFilter, setDateFilter, isLoading }}>
         {children}
     </LoanContext.Provider>
 }

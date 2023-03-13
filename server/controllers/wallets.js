@@ -1,10 +1,9 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
+const orm = require('../utils/orm')
 const dayjs = require('dayjs'); // require
 
 
 function getWallet(req, res, next) {
-    prisma.wallet.findMany({
+    orm.wallet.findMany({
         where: {
             status: { not: 'DELETED' },
         },
@@ -24,7 +23,7 @@ async function createRecord(req, res, next) {
     } = req.body
 
     try {
-        const data = await prisma.wallet.create({
+        const data = await orm.wallet.create({
             data: {
                 title,
                 amount,
@@ -40,7 +39,7 @@ async function createRecord(req, res, next) {
 async function getAvailable(req, res, next) {
     try {
 
-        const sumWallet = await prisma.wallet.aggregate({
+        const sumWallet = await orm.wallet.aggregate({
             where: {
                 status: 'ACTIVED'
             },
@@ -49,7 +48,7 @@ async function getAvailable(req, res, next) {
             }
         })
 
-        const sumLoans = await prisma.loan.aggregate({
+        const sumLoans = await orm.loan.aggregate({
             where: {
                 status: 'ACTIVED'
             },
@@ -58,9 +57,9 @@ async function getAvailable(req, res, next) {
             }
         })
 
-        const sumProfit = await prisma.loan.aggregate({
+        const sumProfit = await orm.loan.aggregate({
             where: {
-                status: 'PAID'
+                status: { in: ['PAID', 'SOLD'] }
             },
             _sum: {
                 amount: true,
@@ -69,7 +68,7 @@ async function getAvailable(req, res, next) {
         })
         const { _sum: { amount: walletAmount } } = sumWallet
         const { _sum: { amount: loanAmount } } = sumLoans
-        const { _sum: { amount: amount, paidAmount: profitAmount } } = sumProfit
+        const { _sum: { paidAmount: profitAmount } } = sumProfit
         res.json({ available: walletAmount + profitAmount - loanAmount, profitAmount, loanAmount })
     } catch (err) {
         next(err)
@@ -77,7 +76,7 @@ async function getAvailable(req, res, next) {
 }
 
 function deleteRecordByID(req, res, next) {
-    prisma.wallet.update({
+    orm.wallet.update({
         where: {
             id: parseInt(req.params.id)
         },

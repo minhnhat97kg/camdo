@@ -14,13 +14,8 @@ export default function Hook() {
     const [isOpenedModalCreating, setOpenedModalCreating] = useState(false)
 
     const total = useMemo(() => profits && profits.reduce((p, c) => {
-        switch (c.status) {
-            case util.Status.Paid:
-                return { ...p, profit: c.paidAmount + p.profit }
-            default:
-                return p
-        }
-    }, { debt: 0, fee: 0, profit: 0 }), [profits])
+        return ({ profit: c.paidAmount + p.profit })
+    }, { profit: 0 }), [profits])
 
 
 

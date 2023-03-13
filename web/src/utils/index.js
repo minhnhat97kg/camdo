@@ -49,9 +49,9 @@ export function interestTypeToString(value, type) {
         case InterestType.PercentsPerDay:
             return `${value}% /ngày`
         case InterestType.AmountPerMonth:
-            return `${value}đ /tháng`
+            return `${formatCurrency(value)}/tháng`
         case InterestType.AmountPerDay:
-            return `${value}đ /ngày`
+            return `${formatCurrency(value)}/ngày`
         default:
             return 'Lỗi dữ liệu'
     }
@@ -64,9 +64,9 @@ export function statusToString(v) {
         case Status.Deleted:
             return <Tag color={'red'}>Đã xoá</Tag>
         case Status.Paid:
-            return <Tag color={'green'}>Đã trả</Tag>
+            return <Tag color={'green'}>Đã chuộc</Tag>
         case Status.Sold:
-            return <Tag color={'cyan'}>Đã bán</Tag>
+            return <Tag color={'cyan'}>Thanh lý</Tag>
         default:
             return <Tag color={'geekblue'}>Lỗi dữ liệu</Tag>
     }

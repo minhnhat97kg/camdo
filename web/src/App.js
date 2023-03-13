@@ -18,7 +18,7 @@ const items = [
   },
   {
     key: '3',
-    label: `Chuộc`,
+    label: `Lịch sử giao dịch`,
     children: <ProfitPane />
     ,
   },

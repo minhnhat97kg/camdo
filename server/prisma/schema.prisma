@@ -44,6 +44,7 @@ enum Status {
   ACTIVED
   DELETED
   PAID
+  SOLD
 }
 
 enum InterestType {
