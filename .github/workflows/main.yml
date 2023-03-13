@@ -20,7 +20,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd web
-      - run: pwd
-      - run: yarn
-      - run: yarn build
+      - name: Build
+        working-directory: ./web
+        run: yarn build
