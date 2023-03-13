@@ -36,6 +36,7 @@ async function createRecord(req, res, next) {
         next(error)
     }
 }
+
 async function getAvailable(req, res, next) {
     try {
 
@@ -69,7 +70,7 @@ async function getAvailable(req, res, next) {
         const { _sum: { amount: walletAmount } } = sumWallet
         const { _sum: { amount: loanAmount } } = sumLoans
         const { _sum: { amount: amount, paidAmount: profitAmount } } = sumProfit
-        res.json({ available: walletAmount + amount + profitAmount - loanAmount, profitAmount, loanAmount })
+        res.json({ available: walletAmount + profitAmount - loanAmount, profitAmount, loanAmount })
     } catch (err) {
         next(err)
     }

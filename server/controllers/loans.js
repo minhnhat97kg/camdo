@@ -161,6 +161,42 @@ async function payLoanByID(req, res, next) {
     }
 }
 
+
+async function getReportByMonth(req, res, next) {
+    try {
+        const month = req.query.month || dayjs()
+
+        const sumLoans = await prisma.loan.aggregate({
+            where: {
+                status: 'ACTIVED',
+                startedAt: {
+                    gte: dayjs(month).startOf('month'),
+                    lt: dayjs(month).endOf('month'),
+                }
+            },
+            _sum: {
+                amount: true
+            }
+        })
+
+        const sumProfit = await prisma.loan.aggregate({
+            where: {
+                status: 'PAID'
+            },
+            _sum: {
+                amount: true,
+                paidAmount: true
+            }
+        })
+        const { _sum: { amount: walletAmount } } = sumWallet
+        const { _sum: { amount: loanAmount } } = sumLoans
+        const { _sum: { amount: amount, paidAmount: profitAmount } } = sumProfit
+        res.json({ available: walletAmount + amount + profitAmount - loanAmount, profitAmount, loanAmount })
+    } catch (err) {
+        next(err)
+    }
+}
+
 module.exports = {
     getLoans,
     getLoanByID,
