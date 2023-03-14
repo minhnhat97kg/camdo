@@ -143,6 +143,7 @@ export default function LoanPane() {
         handleDelele,
         handlePaid,
         handleDetail,
+        handleSold,
         handleEdit,
         isOpenedModalCreating,
         setOpenedModalCreating,
@@ -210,7 +211,7 @@ export default function LoanPane() {
         </div>
         <CreatingForm open={isOpenedModalCreating} onOk={handleCreating} onClose={() => setOpenedModalCreating(false)} />
         <PaidForm open={isOpenedModalPaid} onOk={handlePaid} onClose={() => setOpenedModalPaid(false)} data={selected} />
-        <SoldForm open={isOpenedModalSold} onOk={handlePaid} onClose={() => setOpenedModalSold(false)} data={selected} />
+        <SoldForm open={isOpenedModalSold} onOk={handleSold} onClose={() => setOpenedModalSold(false)} data={selected} />
         <EditForm open={isOpenedModalEdit} onOk={handleEdit} onClose={() => setOpenedModalEdit(false)} data={selected} />
     </Fragment>
 }
