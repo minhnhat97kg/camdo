@@ -1,45 +1,6 @@
 import orm from '@/utils/orm'
 import dayjs from 'dayjs'
-
-const InterestType = {
-    PercentsPerMonth: 'PERCENTS_PER_MONTH',
-    PercentsPerDay: 'PERCENTS_PER_DAY',
-    AmountPerMonth: 'AMOUNT_PER_MONTH',
-    AmountPerDay: 'AMOUNT_PER_DAY',
-}
-
-const Status = {
-    Paid: 'PAID',
-    Deleted: 'DELETED',
-    Actived: 'ACTIVED',
-    Sold: 'SOLD',
-}
-
-function calculateFee(data) {
-    const { amount,
-        interest,
-        interestType,
-        startedAt, paidAt } = data
-    let now = dayjs()
-    if (paidAt) {
-        now = dayjs(paidAt)
-    }
-    const diffDays = now.diff(dayjs(startedAt), 'days') + 1
-    if (diffDays <= 0) return { days: 0, lateAmount: 0 }
-    switch (interestType) {
-        case InterestType.PercentsPerMonth:
-            return { days: diffDays, lateAmount: (interest / 100) / 30 * diffDays * amount }
-        case InterestType.PercentsPerDay:
-            return { days: diffDays, lateAmount: interest / 100 * diffDays * amount }
-        case InterestType.AmountPerMonth:
-            return { days: diffDays, lateAmount: (interest / 30) * diffDays * amount }
-        case InterestType.AmountPerDay:
-            return { days: diffDays, lateAmount: interest * diffDays }
-        default:
-            throw new Error('Invalid interest type')
-    }
-}
-
+import * as utils from '@/utils'
 
 function getLoans(req, res, next) {
     const stt = req.query.stt
@@ -51,7 +12,7 @@ function getLoans(req, res, next) {
         orderBy: { id: 'asc' }
     })
         .then((loans) => {
-            res.status(200).json(loans.map((v) => ({ ...v, ...calculateFee(v) })))
+            res.status(200).json(loans.map((v) => ({ ...v, ...utils.calculateFee(v) })))
         })
         .catch((err) => {
             next(err)
