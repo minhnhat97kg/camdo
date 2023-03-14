@@ -101,7 +101,7 @@ async function updateLoanByID(req, res, next) {
     try {
         await orm.loan.update({
             where: {
-                id: parseInt(id)
+                id: id
             },
             data: {
                 userName,
@@ -122,7 +122,7 @@ async function updateLoanByID(req, res, next) {
 function getLoanByID(req, res, next) {
     orm.loan.findUnique({
         where: {
-            id: parseInt(req.params.id)
+            id: req.params.id
         }
     })
         .then((loan) => {
@@ -136,7 +136,7 @@ function getLoanByID(req, res, next) {
 function deleteLoanByID(req, res, next) {
     orm.loan.update({
         where: {
-            id: parseInt(req.params.id)
+            id: req.params.id
         },
         data: {
             status: 'DELETED',
@@ -158,7 +158,7 @@ async function payLoanByID(req, res, next) {
         if (!paidAmount) return res.status(400).json({ error: 'Amount is requried' })
 
         const result = await orm.loan.updateMany({
-            where: { id: parseInt(id), status: 'ACTIVED' },
+            where: { id: id, status: 'ACTIVED' },
             data: {
                 status: 'PAID',
                 paidAt: dayjs().toISOString(),
@@ -181,7 +181,7 @@ async function sellLoanByID(req, res, next) {
         if (!paidAmount) return res.status(400).json({ error: 'Amount is requried' })
 
         const result = await orm.loan.updateMany({
-            where: { id: parseInt(id), status: 'ACTIVED' },
+            where: { id: id, status: 'ACTIVED' },
             data: {
                 status: 'SOLD',
                 paidAt: dayjs().toISOString(),

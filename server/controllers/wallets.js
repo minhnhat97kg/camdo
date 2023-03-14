@@ -79,7 +79,7 @@ async function getAvailable(req, res, next) {
 function deleteRecordByID(req, res, next) {
     orm.wallet.update({
         where: {
-            id: parseInt(req.params.id)
+            id: req.params.id
         },
         data: {
             status: 'DELETED',
