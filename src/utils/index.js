@@ -24,7 +24,7 @@ export function calculateFee(data) {
         startedAt, paidAt } = data
     let now = dayjs()
     if (paidAt) {
-        now =dayjs(paidAt)
+        now = dayjs(paidAt)
     }
     const diffDays = now.diff(dayjs(startedAt), 'days') + 1
     if (diffDays <= 0) return { days: 0, lateAmount: 0 }
@@ -34,9 +34,9 @@ export function calculateFee(data) {
         case InterestType.PercentsPerDay:
             return { days: diffDays, lateAmount: interest / 100 * diffDays * amount }
         case InterestType.AmountPerMonth:
-            return { days: diffDays, lateAmount: (interest / 30) * diffDays * amount }
+            return { days: diffDays, lateAmount: (interest / 30) * diffDays }
         case InterestType.AmountPerDay:
-            return { days: diffDays, lateAmount: interest * diffDays * amount }
+            return { days: diffDays, lateAmount: interest * diffDays }
         default:
             throw new Error('Invalid interest type')
     }
