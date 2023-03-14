@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).json(err)
 })
-
+console.log(process.env.DATABASE_URL)
 const port = 3001;
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)

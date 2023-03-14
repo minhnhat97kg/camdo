@@ -51,7 +51,6 @@ export default function Hook() {
 
     useEffect(() => {
         listProfit()
-        console.log("init pane")
     }, [])
 
     return {

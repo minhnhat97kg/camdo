@@ -22,18 +22,11 @@ const items = [
         path: '/loans',
         exact: true,
         element: <LoanPane />,
-        loader: () => {
-          console.log("loan loadded")
-          return {}
-        }
       },
       {
         key: '2',
         path: '/history',
         element: <ProfitPane />,
-        loader: () => {
-          return {}
-        }
       },
       {
         key: '3',

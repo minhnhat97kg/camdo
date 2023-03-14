@@ -12,7 +12,7 @@ const columns = ({ onDelete }) => [
         title: 'ID',
         dataIndex: 'id',
         key: 'id',
-        render:v=>v.slice(-5),
+        render: v => `${v}`.slice(-5),
         sorter: (a, b) => a.id - b.id
     },
     {
