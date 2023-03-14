@@ -59,18 +59,18 @@ export default function WalletPane() {
 
 
     return <Fragment>
-        <Row gutter={24} align={''}>
-            <Col span={6}>
+        <Row gutter={24}>
+            <Col span={8}>
                 <Card bordered={false}>
                     <Statistic
-                        prefix={<MoneyCollectTwoTone/>}
+                        prefix={<MoneyCollectTwoTone />}
                         title="Tiền hiện có"
                         value={available.available || 0}
                         precision={0}
                         suffix={'đ'} />
                 </Card>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
                 <Card bordered={false}>
                     <Statistic
                         title="Thu"
@@ -82,7 +82,7 @@ export default function WalletPane() {
                     />
                 </Card>
             </Col>
-            <Col span={6}>
+            <Col span={8}>
                 <Card bordered={false}>
                     <Statistic
                         title="Chi"
@@ -94,11 +94,13 @@ export default function WalletPane() {
                 </Card>
             </Col>
         </Row>
-        { <Row style={{ margin: '20px 10px' }}>
-            <Col span={10} >
-                <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Tạo giao dịch</Button>
-            </Col>
-            {/* <Col span={14} >
+        <div style={{ background: 'white', padding: '10px 5px', margin: '20px 0px' }}>
+
+            <Row style={{ margin: '20px 10px' }}>
+                <Col span={10} >
+                    <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Tạo giao dịch</Button>
+                </Col>
+                {/* <Col span={14} >
 
                 <Space>
                     <p>Chọn thời gian: </p>
@@ -106,13 +108,14 @@ export default function WalletPane() {
                     <Button onClick={listWallet} icon={<SearchOutlined />} type={'primary'}>Tìm</Button>
                 </Space>
             </Col> */}
-        </Row> }
+            </Row>
 
-        <Table size='small' dataSource={wallets} columns={columns({
-            onDelete: handleDelele,
-        })}
-            key={(v) => v.id}
-        />
+            <Table size='small' dataSource={wallets} columns={columns({
+                onDelete: handleDelele,
+            })}
+                key={(v) => v.id}
+            />
+        </div>
         <CreatingForm open={isOpenedModalCreating} onOk={handleCreating} onClose={() => setOpenedModalCreating(false)} />
     </Fragment>
 }

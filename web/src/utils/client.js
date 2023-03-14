@@ -4,7 +4,7 @@ let instance = null;
 class Client {
     Instance() {
         if (!instance) {
-            instance = axios.create({ baseURL: 'http://207.148.68.86:3001' });
+            instance = axios.create({ baseURL: process.env.REACT_APP_HOST });
         }
         return instance;
     }

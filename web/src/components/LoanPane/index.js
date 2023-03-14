@@ -158,7 +158,7 @@ export default function LoanPane() {
 
 
     return <Fragment>
-        <Row gutter={24} align={''}>
+        <Row gutter={24} justify={'center'}>
             <Col span={8}>
                 <Card bordered={false}>
                     <Statistic
@@ -180,31 +180,33 @@ export default function LoanPane() {
                 </Card>
             </Col>
         </Row>
-        <Row style={{ margin: '20px 10px' }}>
-            <Col span={10} >
-                <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Khoản vay mới</Button>
-            </Col>
-        </Row>
+        <div style={{ background: 'white', padding: '10px 5px', margin:'20px 0px' }}>
+            <Row style={{ margin: '20px 10px' }}>
+                <Col span={10} >
+                    <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Khoản vay mới</Button>
+                </Col>
+            </Row>
 
-        <Table size='small' dataSource={loans} columns={columns({
-            onDelete: handleDelele,
-            onDetail: handleDetail,
-            onPaid: (v) => {
-                setSelected(v)
-                setOpenedModalPaid(true)
-            },
-            onSold: (v) => {
-                setSelected(v)
-                setOpenedModalSold(true)
-            },
-            onEdit: (v) => {
-                setSelected(v)
-                setOpenedModalEdit(true)
-            },
-        })}
-            key={(v) => v.id}
-            loading={isLoading}
-        />
+            <Table size='small' dataSource={loans} columns={columns({
+                onDelete: handleDelele,
+                onDetail: handleDetail,
+                onPaid: (v) => {
+                    setSelected(v)
+                    setOpenedModalPaid(true)
+                },
+                onSold: (v) => {
+                    setSelected(v)
+                    setOpenedModalSold(true)
+                },
+                onEdit: (v) => {
+                    setSelected(v)
+                    setOpenedModalEdit(true)
+                },
+            })}
+                key={(v) => v.id}
+                loading={isLoading}
+            />
+        </div>
         <CreatingForm open={isOpenedModalCreating} onOk={handleCreating} onClose={() => setOpenedModalCreating(false)} />
         <PaidForm open={isOpenedModalPaid} onOk={handlePaid} onClose={() => setOpenedModalPaid(false)} data={selected} />
         <SoldForm open={isOpenedModalSold} onOk={handlePaid} onClose={() => setOpenedModalSold(false)} data={selected} />

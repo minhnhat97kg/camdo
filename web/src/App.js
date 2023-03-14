@@ -4,38 +4,52 @@ import LoanProvider from './contexts/loans'
 import WalletPane from './components/WalletPane';
 import WalletProvider from './contexts/wallet';
 import ProfitPane from './components/ProfitPane';
+import { useEffect, useState } from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import RootLayout from './components/RootLayout';
+
 const items = [
   {
-    key: '1',
-    label: `Thống kê`,
-    children: `Content of Tab Pane 1`,
-  },
-  {
-    key: '2',
-    label: `Cầm đồ`,
-    children: <LoanPane />
-    ,
-  },
-  {
-    key: '3',
-    label: `Lịch sử giao dịch`,
-    children: <ProfitPane />
-    ,
-  },
-  {
-    key: '4',
-    label: `Thu chi`,
-    children: <WalletPane />,
-  },
-];
+    key: '0',
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      {
+        key: '1',
+        path: '/loans',
+        exact: true,
+        element: <LoanPane />,
+        loader: () => {
+          console.log("loan loadded")
+          return {}
+        }
+      },
+      {
+        key: '2',
+        path: '/history',
+        element: <ProfitPane />,
+        loader: () => {
+          return {}
+        }
+      },
+      {
+        key: '3',
+        path: '/wallets',
+        element: <WalletPane />,
+      },]
+  }
+]
+const router = createBrowserRouter(items);
 export default function App() {
+
   return (
-    <div style={{ padding: 20 }}>
-      <WalletProvider>
-        <LoanProvider>
-          <Tabs defaultActiveKey="2" items={items} tabPosition={'left'} style={{}}/>
-        </LoanProvider>
-      </WalletProvider>
-    </div>
+    <WalletProvider>
+      <LoanProvider>
+        <RouterProvider router={router} />
+      </LoanProvider>
+    </WalletProvider>
   )
 }

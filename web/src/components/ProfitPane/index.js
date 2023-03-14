@@ -135,7 +135,7 @@ export default function ProfitPane() {
 
 
     return <Fragment>
-        <Row gutter={24} style={{ margin: '20px 10px' }} >
+        <Row gutter={10} >
             <Col span={12}>
                 <Card bordered={false}>
                     <Statistic
@@ -153,14 +153,16 @@ export default function ProfitPane() {
             </Col>
         </Row>
 
-        <Table size='small'
-            dataSource={profits}
-            columns={columns({
-                onDelete: handleDelele,
-                onDetail: handleDetail,
-            })}
-            key={(v) => v.id}
-        />
+        <div style={{ background: 'white', padding: '10px 5px', margin: '20px 0px' }}>
+            <Table size='small'
+                dataSource={profits}
+                columns={columns({
+                    onDelete: handleDelele,
+                    onDetail: handleDetail,
+                })}
+                key={(v) => v.id}
+            />
+        </div>
         {/* <CreatingForm open={isOpenedModalCreating} onOk={handleCreating} onClose={() => setOpenedModalCreating(false)} /> */}
     </Fragment>
 }
