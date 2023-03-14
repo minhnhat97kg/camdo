@@ -4,7 +4,7 @@ let instance = null;
 class Client {
     Instance() {
         if (!instance) {
-            instance = axios.create({ baseURL: process.env.REACT_APP_HOST || 'http://localhost:3001/api' });
+            instance = axios.create({ baseURL: process.env.REACT_APP_HOST || '/api/' });
         }
         return instance;
     }
