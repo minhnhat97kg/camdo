@@ -6,7 +6,7 @@ import { CreditCardOutlined, DeleteOutlined, DollarOutlined, DownOutlined, EditO
 import { Fragment, useMemo } from 'react'
 import CreatingForm from './CreatingForm'
 import PaidForm from './PaidForm'
-import locale from 'antd/es/date-picker/locale/vi_VN';
+import locale from 'antd/lib/date-picker/locale/vi_VN';
 import SoldForm from './SoldForm'
 import EditForm from './EditForm'
 

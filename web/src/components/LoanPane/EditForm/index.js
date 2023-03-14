@@ -8,7 +8,7 @@ import {
     Modal
 } from 'antd';
 import dayjs from 'dayjs';
-import locale from 'antd/es/date-picker/locale/vi_VN';
+import locale from 'antd/lib/date-picker/locale/vi_VN';
 import { useEffect, useState } from 'react';
 
 export default function EditForm({ onOk, data, open, onClose }) {

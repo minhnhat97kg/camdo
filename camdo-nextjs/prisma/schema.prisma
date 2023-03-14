@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Loan {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  userName     String
+  productName  String
+  amount       Int
+  status       Status       @default(ACTIVED)
+  interest     Float
+  interestType InterestType
+  startedAt    DateTime
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  paidAmount   Int?
+  paidAt       DateTime?
+  userPhone    String?
+  userID       Int
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userName String
+  password String
+}
+
+model Wallet {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  amount    Int
+  userID    Int
+  status    Status   @default(ACTIVED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  ACTIVED
+  DELETED
+  PAID
+  SOLD
+}
+
+enum InterestType {
+  PERCENTS_PER_MONTH
+  PERCENTS_PER_DAY
+  AMOUNT_PER_MONTH
+  AMOUNT_PER_DAY
+}

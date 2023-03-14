@@ -9,7 +9,6 @@ import {
     message
 } from 'antd';
 import dayjs from 'dayjs';
-import locale from 'antd/es/date-picker/locale/vi_VN';
 import { useEffect, useMemo, useState } from 'react';
 import * as util from '../../../utils'
 

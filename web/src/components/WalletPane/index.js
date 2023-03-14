@@ -5,7 +5,7 @@ import useHook from './hook'
 import { PlusCircleOutlined, SearchOutlined, ArrowUpOutlined, ArrowDownOutlined, MoneyCollectOutlined, MoneyCollectTwoTone } from '@ant-design/icons'
 import { Fragment, useMemo } from 'react'
 import CreatingForm from './CreatingForm'
-import locale from 'antd/es/date-picker/locale/vi_VN';
+import locale from 'antd/lib/date-picker/locale/vi_VN';
 
 const columns = ({ onDelete }) => [
     {
