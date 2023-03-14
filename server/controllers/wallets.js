@@ -27,6 +27,7 @@ async function createRecord(req, res, next) {
             data: {
                 title,
                 amount,
+                status: 'ACTIVED',
                 userID: 0,
             }
         })

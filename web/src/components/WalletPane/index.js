@@ -12,6 +12,7 @@ const columns = ({ onDelete }) => [
         title: 'ID',
         dataIndex: 'id',
         key: 'id',
+        render:v=>v.slice(-5),
         sorter: (a, b) => a.id - b.id
     },
     {
@@ -75,7 +76,7 @@ export default function WalletPane() {
                     <Statistic
                         title="Thu"
                         value={total.income}
-                        precision={2}
+                        precision={0}
                         valueStyle={{ color: '#3f8600' }}
                         prefix={<ArrowUpOutlined />}
                         suffix="đ"

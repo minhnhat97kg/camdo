@@ -3,6 +3,7 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useContext, useEffect, useMemo, useState } from 'react'
 import axios from 'axios';
 import { WalletContext } from '../../contexts/wallet';
+import client from '../../utils/client';
 
 export default function Hook() {
     const { wallets, listWallet, dateFilter, setDateFilter, available } = useContext(WalletContext)
@@ -25,7 +26,7 @@ export default function Hook() {
             cancelText: 'No',
             async onOk() {
                 try {
-                    const { data } = await axios.delete(`http://207.148.68.86:3001/loans/${id}`)
+                    const { data } = await client.delete(`/wallets/${id}`)
                     message.info(JSON.stringify(data))
                 } catch (err) {
                     message.error(`Lỗi khi xoá ${productName}.`)
@@ -39,7 +40,7 @@ export default function Hook() {
 
     async function handleCreating(values) {
         try {
-            const { data } = await axios.post(`http://207.148.68.86:3001/wallets`, values)
+            const { data } = await client.post(`/wallets`, values)
             message.info(JSON.stringify(data))
         } catch (err) {
             message.error(`Lỗi khi tạo khoản vay`)

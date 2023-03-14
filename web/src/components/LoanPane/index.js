@@ -15,6 +15,7 @@ const columns = ({ onDelete, onDetail, onPaid, onSold, onEdit }) => [
         title: 'ID',
         dataIndex: 'id',
         key: 'id',
+        render: v => v.slice(-5),
         sorter: (a, b) => a.id - b.id
     },
     {
@@ -180,7 +181,7 @@ export default function LoanPane() {
                 </Card>
             </Col>
         </Row>
-        <div style={{ background: 'white', padding: '10px 5px', margin:'20px 0px' }}>
+        <div style={{ background: 'white', padding: '10px 5px', margin: '20px 0px' }}>
             <Row style={{ margin: '20px 10px' }}>
                 <Col span={10} >
                     <Button onClick={() => setOpenedModalCreating(true)} icon={<PlusCircleOutlined />} type={'primary'} style={{ background: 'green' }}>Khoản vay mới</Button>

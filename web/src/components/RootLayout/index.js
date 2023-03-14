@@ -1,5 +1,5 @@
 
-import { BarChartOutlined, BookOutlined, CalculatorOutlined, UserOutlined, VideoCameraOutlined, WalletOutlined } from '@ant-design/icons';
+import { BarChartOutlined, BookOutlined, CalculatorOutlined, LogoutOutlined, UserOutlined, VideoCameraOutlined, WalletOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import React, { useEffect } from 'react';
 import './styles.css'
@@ -32,6 +32,14 @@ const items = [
         path: '/wallets',
         label: `Thu chi`,
         icon: <WalletOutlined />
+    }, {
+        type: 'divider',
+    },
+    {
+        key: '4',
+        path: '/logout',
+        label: `Đăng xuất`,
+        icon: <LogoutOutlined />
     },
 ]
 const RootLayout = () => {
@@ -54,13 +62,9 @@ const RootLayout = () => {
                 <Menu
                     theme="light"
                     mode="inline"
-                    items={items.map((r, index) => ({
-                        key: r.path,
-                        label: r.label,
-                        icon: r.icon
-                    }),
+                    items={items.map((r, index) => r.type === 'divider' ? r : ({ key: r.path, label: r.label, icon: r.icon }),
                     )}
-                    onClick={({ key }) => navigate(key)}
+                    onClick={({ key }) => key === '/logout' ? alert('Logout') : navigate(key)}
                 />
             </Sider>
             <Layout>

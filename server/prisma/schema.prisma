@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = "postgresql://postgres:password@207.148.68.86/camdo"
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model Loan {
-  id           Int          @id @default(autoincrement())
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
   userName     String
   productName  String
   amount       Int
@@ -25,13 +25,13 @@ model Loan {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   userName String
   password String
 }
 
 model Wallet {
-  id Int      @id @default(autoincrement())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   amount    Int
   userID    Int
